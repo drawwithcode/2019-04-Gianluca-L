@@ -6,6 +6,7 @@ var playButtonClicked = false;
 var pauseButtonClicked = false;
 var allMyBalls = [];
 var amountOfBalls = 1;
+var realWidth;
 
 function preload(){
   backgroundImage = loadImage("./assets/background.png");
@@ -16,7 +17,7 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
+  realWidth = windowWidth;
   analyzer = new p5.Amplitude();
   analyzer.setInput(mySong);
 
@@ -32,7 +33,10 @@ function draw() {
 
   push();
   imageMode(CENTER);
-  image(backgroundImage, width/2, height/2, backgroundImage.width + 100, backgroundImage.height);
+  image(backgroundImage, width/2, height/2, backgroundImage.width + width/96, backgroundImage.height);
+
+
+
 
   if (playButtonClicked == true) {
     tint(255, 0);
@@ -48,6 +52,11 @@ function draw() {
   image(pauseButton, width/2, barheight + height/20.5, pauseButton.width, pauseButton.height);
   pop();
 
+  if (windowWidth < realWidth) {
+    backgroundImage.resize(0, height);
+    playButton.resize(0, height/27.69);
+    pauseButton.resize(0, height/27.69);
+  }
 
       // var hh = 2.74 * height / 3;
   // fill('white');
@@ -72,14 +81,14 @@ function draw() {
 
   // Band and song title
   textFont("MichelangeloFree-2O7Le");
-  textSize(30);
+  textSize(width/64);
   fill('white');
-  text("Zero Call", 30, 60);
+  text("Zero Call", width/64, width/32);
 
   textFont("Neoneon");
-  textSize(53 + volume*0.01);
+  textSize(width/36.2 + volume*0.01);
   fill(247, 96, 242, volume);
-  text("Earthquake", 30, 115);
+  text("Earthquake", width/64, width/16.7);
 
 
 }
