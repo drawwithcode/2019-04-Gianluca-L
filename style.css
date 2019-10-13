@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'MichelangeloFree-2O7Le';
+  src: url('assets/MichelangeloFree-2O7Le.otf')  format('opentype');
+}
+@font-face {
+  font-family: 'Neoneon';
+  src: url('assets/Neoneon.otf')  format('opentype');
+}
+canvas {
+  display: block;
+}
