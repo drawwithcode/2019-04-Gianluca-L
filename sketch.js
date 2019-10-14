@@ -4,9 +4,12 @@ var pauseButton;
 var mySong;
 var playButtonClicked = false;
 var pauseButtonClicked = false;
-var allMyBalls = [];
-var amountOfBalls = 1;
+var allMyLines = [];
+var amountOfLines = 25;
 var realWidth;
+var g;
+var h;
+var f = 1;
 
 function preload(){
   backgroundImage = loadImage("./assets/background.png");
@@ -22,6 +25,21 @@ function setup() {
   analyzer.setInput(mySong);
 
   fft = new p5.FFT();
+
+  for(var i = 0; i < amountOfLines; i++) {
+    // var tempx = random()* windowWidth;
+    // var tempy = random()* windowHeight;
+    // var tempr = random()* 50 + 10;
+
+    var tempLine = new Line(i*65 + 180, height/2 + 142, 0, 300); // istance
+    // tempBall.s
+    // tempBall.color = color(random()*255, random()*255, random()*255);
+
+
+
+
+    allMyLines.push(tempLine);
+  }
 }
 
 function draw() {
@@ -29,15 +47,15 @@ function draw() {
 
 
   volume = analyzer.getLevel();
-  volume = map(volume, 0, 1, 0, 255); // 2.74 * height / 3
+  volume = map(volume, 0, 1, 0, 255); // volume remapped from 0 to 255 to change text transparency
+
 
   push();
   imageMode(CENTER);
   image(backgroundImage, width/2, height/2, backgroundImage.width + width/96, backgroundImage.height);
 
 
-
-
+  // Play and Pause buttons
   if (playButtonClicked == true) {
     tint(255, 0);
   } else {
@@ -58,38 +76,36 @@ function draw() {
     pauseButton.resize(0, height/27.69);
   }
 
-      // var hh = 2.74 * height / 3;
-  // fill('white');
-  // stroke('white');
-  // quad(39 + 600, hh -volume*0.1, 39 + 600, hh -volume*0.1 +100, 158 + 600, hh -volume*0.1 +100, 158 + 600, hh -volume*0.1);
-  //
-  // fill('violet');
-  // stroke('white');
-  // quad(85 + 600, hh - 30 -volume*0.1, 40 + 600, hh -volume*0.1, 158 + 600, hh -volume*0.1, 197 + 600, hh - 30 -volume*0.1);
+  // Waves
   var barheight = 2.725 * height / 3;
-
   var spectrum = fft.analyze();
   noStroke();
   fill('violet');
   for (var i = 0; i < spectrum.length; i++) {
     var x = map(i, 0, spectrum.length, 0, width/2);
-    var h = - barheight + map(spectrum[i], 0, 255, barheight, barheight -height/4.32);  // - height
-    rect(x, barheight, width / spectrum.length/2.5, h); // height
+    var h = - barheight + map(spectrum[i], 0, 255, barheight, barheight -height/4.32);
+    rect(x, barheight, width / spectrum.length/2.5, h);
     rect(width - x, barheight, width / spectrum.length/2.5, h);
-
   }
 
-  // Band and song title
+  // Band text
   textFont("MichelangeloFree-2O7Le");
   textSize(width/64);
   fill('white');
   text("Zero Call", width/64, width/32);
-
+  // Song title text
   textFont("Neoneon");
   textSize(width/36.2 + volume*0.01);
   fill(247, 96, 242, volume);
   text("Earthquake", width/64, width/16.7);
 
+
+  for(var i = 0; i < allMyLines.length; i++) {
+    var tempLine = allMyLines[i];
+
+    tempLine.display();
+
+  }
 
 }
 function mouseClicked() {
@@ -107,4 +123,120 @@ function mouseClicked() {
   }
 }
 
-// function Tile
+function Line (_x, _y, _x2, _y2) {
+
+  volume = analyzer.getLevel();
+  volume = map(volume, 0, 1, 0, 500);
+
+  this.x = _x;
+  this.y = _y;
+  this.x2 = _x2;
+  this.y2 = _y2;
+  this.rotation = -0.2;
+  this.color = 'violet';
+
+  this.display = function() {
+
+    push();
+    translate(this.x, this.y);
+
+    stroke(color(247, 96, 242, volume));
+    strokeWeight(2.5);
+
+    // length of the central line
+    if (_x == width/2) {
+      f = 1.3;
+    }
+    else {
+      f = 1;
+    }
+
+    // length of the lines based on the volume
+    this.y2 = volume * f;
+
+    // rotation of the lines
+    g = -0.2;
+
+    // lines at the right
+    var w70 = 27.4;
+    if (_x > width/2 && _x < width/2 + width/w70) {
+       rotate(g);
+    }
+    else if (_x > width/2 + width/w70 && _x < width/2 + width/w70*2) {
+       rotate(g*2);
+    }
+    else if (_x > width/2 + width/w70*2 && _x < width/2 + width/w70*3) {
+       rotate(g*2.5);
+    }
+    else if (_x > width/2 + width/w70*3 && _x < width/2 + width/w70*4) {
+       rotate(g*3.3);
+    }
+    else if (_x > width/2 + width/w70*4 && _x < width/2 + width/w70*5) {
+       rotate(g*3.8);
+    }
+    else if (_x > width/2 + width/w70*5 && _x < width/2 + width/w70*6) {
+       rotate(g*4.4);
+    }
+    else if (_x > width/2 + width/w70*6 && _x < width/2 + width/w70*7) {
+       rotate(g*4.75);
+    }
+    else if (_x > width/2 + width/w70*7 && _x < width/2 + width/w70*8) {
+       rotate(g*5.2);
+    }
+    else if (_x > width/2 + width/w70*8 && _x < width/2 + width/w70*9) {
+       rotate(g*5.5);
+    }
+    else if (_x > width/2 + width/w70*9 && _x < width/2 + width/w70*10) {
+       rotate(g*5.65);
+    }
+    else if (_x > width/2 + width/w70*10 && _x < width/2 + width/w70*11) {
+       rotate(g*5.8);
+    }
+    else if (_x > width/2 + width/w70*11) {
+       rotate(g*5.95);
+    }
+
+    // lines at the left
+
+    else if (_x < width/2 && _x > width/2 - width/w70) {
+       rotate(-g);
+    }
+    else if (_x < width/2 - width/w70 && _x > width/2 - width/w70*2) {
+       rotate(-g*2);
+    }
+    else if (_x < width/2 - width/w70*2 && _x > width/2 - width/w70*3) {
+       rotate(-g*2.5);
+    }
+    else if (_x < width/2 - width/w70*3 && _x > width/2 - width/w70*4) {
+       rotate(-g*3.3);
+    }
+    else if (_x < width/2 - width/w70*4 && _x > width/2 - width/w70*5) {
+       rotate(-g*3.8);
+    }
+    else if (_x < width/2 - width/w70*5 && _x > width/2 - width/w70*6) {
+       rotate(-g*4.4);
+    }
+    else if (_x < width/2 - width/w70*6 && _x > width/2 - width/w70*7) {
+       rotate(-g*4.75);
+    }
+    else if (_x < width/2 - width/w70*7 && _x > width/2 - width/w70*8) {
+       rotate(-g*5.2);
+    }
+    else if (_x < width/2 - width/w70*8 && _x > width/2 - width/w70*9) {
+       rotate(-g*5.5);
+    }
+    else if (_x < width/2 - width/w70*9 && _x > width/2 - width/w70*10) {
+       rotate(-g*5.65);
+    }
+    else if (_x < width/2 - width/w70*10 && _x > width/2 - width/w70*11) {
+       rotate(-g*5.8);
+    }
+    else if (_x < width/2 - width/w70*11) {
+       rotate(-g*5.95);
+    }
+
+    line(0, 0, this.x2, this.y2);
+
+    pop();
+  }
+}
