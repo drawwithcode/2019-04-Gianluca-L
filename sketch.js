@@ -10,6 +10,8 @@ var realWidth;
 var g;
 var h;
 var f = 1;
+var ampSlider;
+var rateSlider;
 
 function preload(){
   backgroundImage = loadImage("./assets/background.png");
@@ -35,11 +37,17 @@ function setup() {
     // tempBall.s
     // tempBall.color = color(random()*255, random()*255, random()*255);
 
-
-
-
     allMyLines.push(tempLine);
   }
+
+  // sliders to control the amplitude and the rate
+  ampSlider = createSlider(0, 4, 1, 0.01);
+  ampSlider.position(width - width/64 - width/12.8, 35);
+  ampSlider.style('width', 'width/12.8');
+
+  rateSlider = createSlider(-2, 2, 1, 0.01);
+  rateSlider.position(width - width/64 - width/12.8, 80);
+  rateSlider.style('width', 'width/12.8');
 }
 
 function draw() {
@@ -48,6 +56,8 @@ function draw() {
 
   volume = analyzer.getLevel();
   volume = map(volume, 0, 1, 0, 255); // volume remapped from 0 to 255 to change text transparency
+
+
 
 
   push();
@@ -107,6 +117,15 @@ function draw() {
 
   }
 
+  // sliders to control the rate and the amplitude
+
+  var val1 = ampSlider.value();
+  mySong.amp(val1);
+
+  var val2 = rateSlider.value();
+  mySong.rate(val2);
+
+
 }
 function mouseClicked() {
   var barheight = 2.725 * height / 3;
@@ -126,7 +145,7 @@ function mouseClicked() {
 function Line (_x, _y, _x2, _y2) {
 
   volume = analyzer.getLevel();
-  volume = map(volume, 0, 1, 0, 500);
+  volume = map(volume, 0, 1, 0, width/3.84);  // 500
 
   this.x = _x;
   this.y = _y;
