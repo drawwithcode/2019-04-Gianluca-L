@@ -6,7 +6,7 @@ var playButtonClicked = false;
 var pauseButtonClicked = false;
 var allMyLines = [];
 var amountOfLines = 25;
-var realWidth;
+var imageRatio;
 var g;
 var h;
 var f = 1;
@@ -22,48 +22,41 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  realWidth = windowWidth;
+
+  // Resize the images
+  imageRatio = backgroundImage.height/backgroundImage.width;
+
   analyzer = new p5.Amplitude();
   analyzer.setInput(mySong);
 
   fft = new p5.FFT();
 
   for(var i = 0; i < amountOfLines; i++) {
-    // var tempx = random()* windowWidth;
-    // var tempy = random()* windowHeight;
-    // var tempr = random()* 50 + 10;
 
-    var tempLine = new Line(i*65 + 180, height/2 + 142, 0, 300); // istance
-    // tempBall.s
-    // tempBall.color = color(random()*255, random()*255, random()*255);
+    var tempLine = new Line(i*65 + 180, height/2 + width/13.52, 0, width/6.4);
 
     allMyLines.push(tempLine);
   }
 
   // sliders to control the amplitude and the rate
   ampSlider = createSlider(0, 4, 1, 0.01);
-  ampSlider.position(width - width/64 - width/12.8, 35);
+  ampSlider.position(width - width/64 - width/12.8, height/30.86);
   ampSlider.style('width', 'width/12.8');
 
   rateSlider = createSlider(-2, 2, 1, 0.01);
-  rateSlider.position(width - width/64 - width/12.8, 80);
+  rateSlider.position(width - width/64 - width/12.8, height/13.5);
   rateSlider.style('width', 'width/12.8');
 }
 
 function draw() {
   var barheight = 2.725 * height / 3;
 
-
   volume = analyzer.getLevel();
   volume = map(volume, 0, 1, 0, 255); // volume remapped from 0 to 255 to change text transparency
-
-
-
 
   push();
   imageMode(CENTER);
   image(backgroundImage, width/2, height/2, backgroundImage.width + width/96, backgroundImage.height);
-
 
   // Play and Pause buttons
   if (playButtonClicked == true) {
@@ -79,12 +72,6 @@ function draw() {
   }
   image(pauseButton, width/2, barheight + height/20.5, pauseButton.width, pauseButton.height);
   pop();
-
-  if (windowWidth < realWidth) {
-    backgroundImage.resize(0, height);
-    playButton.resize(0, height/27.69);
-    pauseButton.resize(0, height/27.69);
-  }
 
   // Waves
   var barheight = 2.725 * height / 3;
@@ -109,7 +96,6 @@ function draw() {
   fill(247, 96, 242, volume);
   text("Earthquake", width/64, width/16.7);
 
-
   for(var i = 0; i < allMyLines.length; i++) {
     var tempLine = allMyLines[i];
 
@@ -125,11 +111,11 @@ function draw() {
   var val2 = rateSlider.value();
   mySong.rate(val2);
 
-
 }
+
 function mouseClicked() {
   var barheight = 2.725 * height / 3;
-  if (mouseX > width / 2 - 35 && mouseX < width / 2 + 35 && mouseY > barheight + height / 20.5 - 39 && mouseY < barheight + height / 20.5 + 39) {
+  if (mouseX > width / 2 - width/54.86 && mouseX < width / 2 + width/54.86 && mouseY > barheight + height / 20.5 - height/27.69 && mouseY < barheight + height / 20.5 + height/27.69) {
     if (mySong.isPlaying() == false) {
       playButtonClicked = true;
       pauseButtonClicked = true;
@@ -174,7 +160,7 @@ function Line (_x, _y, _x2, _y2) {
     this.y2 = volume * f;
 
     // rotation of the lines
-    g = -0.2;
+    g = -width/9600;  // -0.2
 
     // lines at the right
     var w70 = 27.4;
