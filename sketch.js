@@ -6,7 +6,6 @@ var playButtonClicked = false;
 var pauseButtonClicked = false;
 var allMyLines = [];
 var amountOfLines = 25;
-var imageRatio;
 var g;
 var h;
 var f = 1;
@@ -22,9 +21,6 @@ function preload(){
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-
-  // Resize the images
-  imageRatio = backgroundImage.height/backgroundImage.width;
 
   analyzer = new p5.Amplitude();
   analyzer.setInput(mySong);
